@@ -25,3 +25,6 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
 server:
   port: 8091
+  error:
+    include-message: always
+    include-binding-errors: always
