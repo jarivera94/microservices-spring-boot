@@ -5,9 +5,11 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/jarivera94/microservices-spring-boot/
-          searchPaths: config-data
-          username: {GITHUB_USER_NAME}
-          password: {GITHUB_PASSWORD}
-      username: root
+          uri: https://github.com/jarivera94/microservices-spring-boot.git
+          username: ${GITHUB_USER_NAME}
+          password: ${GITHUB_PASSWORD}
+          search-paths: config-data
+  security:
+    user:
+      name: root
       password: s3cr3t

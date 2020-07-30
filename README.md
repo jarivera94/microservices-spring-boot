@@ -89,18 +89,12 @@ POST
 
 ### Gateway Service 
 
-Customer
+https://cloud.spring.io/spring-cloud-config/reference/html/
 
-    curl -X GET http://localhost:8080/customers    -H 'Accept: application/json' | jq '.'
+curl http://root:s3cr3t@localhost:8081/product-service/default | jq "."
+curl http://root:s3cr3t@localhost:8081/customer-service/default | jq "."
+curl http://root:s3cr3t@localhost:8081/shopping-service/default | jq "."
 
-Products
-
-    curl -X GET http://localhost:8080/products  -H 'Accept: application/json' | jq '.'
-
-
-Invoices
-
-    curl -X GET http://localhost:8080/invoices/1 -H 'Accept: application/json' | jq '.'
 
 
 
