@@ -5,5 +5,9 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/jarivera94/microservices-spring-boot/tree/02-CONFIG-SERVER
+          uri: https://github.com/jarivera94/microservices-spring-boot/
           searchPaths: config-data
+          username: {GITHUB_USER_NAME}
+          password: {GITHUB_PASSWORD}
+      username: root
+      password: s3cr3t
