@@ -1,2 +1,8 @@
+include 'customer-service'
+include 'product-service'
+include 'shopping-service'
+include 'config-server'
+include 'registry-service'
+
 rootProject.name = 'microservices-spring-boot'
 
