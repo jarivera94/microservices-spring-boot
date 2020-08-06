@@ -6,3 +6,12 @@ spring:
       uri: http://localhost:8081
       username: root
       password: s3cr3t
+feign:
+  hystrix:
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 2000
+        readTimeout: 2000
+        loggerLevel: basic
