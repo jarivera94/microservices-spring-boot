@@ -4,6 +4,7 @@ import academy.digitallab.store.shopping.service.InvoiceService;
 import academy.digitallab.store.shopping.entity.Invoice;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,10 +22,10 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequestMapping("/invoices")
+@RequiredArgsConstructor
 public class InvoiceRest {
 
-    @Autowired
-    InvoiceService invoiceService;
+    private final InvoiceService invoiceService;
 
     // -------------------Retrieve All Invoices--------------------------------------------
     @GetMapping

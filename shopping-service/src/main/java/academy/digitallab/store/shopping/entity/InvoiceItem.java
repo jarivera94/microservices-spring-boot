@@ -7,6 +7,14 @@ import javax.persistence.*;
 import javax.validation.constraints.Positive;
 import java.io.Serializable;
 
+import academy.digitallab.store.shopping.model.Product;
+import lombok.Data;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import java.io.Serializable;
+
 @Entity
 @Data
 @Table(name = "tbl_invoce_items")
@@ -17,8 +25,10 @@ public class InvoiceItem  {
     private Long id;
     @Positive(message = "El stock debe ser mayor que cero")
     private Double quantity;
+    @Positive(message = "El precio debe ser mayor que cero")
     private Double  price;
 
+    @NotNull(message = "la producto no  debe ser vacío")
     @Column(name = "product_id")
     private Long productId;
 
@@ -26,6 +36,8 @@ public class InvoiceItem  {
     @Transient
     private Double subTotal;
 
+    @Transient
+    private Product product;
 
     public Double getSubTotal(){
         if (this.price >0  && this.quantity >0 ){

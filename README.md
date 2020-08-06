@@ -1,5 +1,5 @@
+# Arquitectura de Microservicios
 
-# Course Microservice : Spring Boot & Spring Cloud
 
 ## Requirements
 
@@ -10,15 +10,6 @@
 - JQ
 - Docker
 
-## Services
-
-
-### Config Service
-http://localhost:8090/customer-service/default
-
-### Discovery  Service (Eureka)
-    
-http://localhost:8099/
 
 
 ### Microservice Product
@@ -38,6 +29,11 @@ POST
     "category":{"id":1,"name": "shoes"}
     }'
 ### Microservice Customer
+
+  $ SPRING_PROFILES_ACTIVE=default gradle bootRun
+  $ SPRING_PROFILES_ACTIVE=primary gradle bootRun
+  
+  
 GET
 
     curl -X GET http://localhost:8092/customers    -H 'Accept: application/json' | jq '.'
@@ -86,16 +82,10 @@ POST
             }
         ]
     }'
-
-### Gateway Service 
+### Config Service
 
 https://cloud.spring.io/spring-cloud-config/reference/html/
 
-curl http://root:s3cr3t@localhost:8081/product-service/default | jq "."
-curl http://root:s3cr3t@localhost:8081/customer-service/default | jq "."
-curl http://root:s3cr3t@localhost:8081/shopping-service/default | jq "."
-
-
-
-
-
+    $ curl http://root:s3cr3t@localhost:8081/product-service/default | jq "."
+    $ curl http://root:s3cr3t@localhost:8081/customer-service/default | jq "."
+    $ curl http://root:s3cr3t@localhost:8081/shopping-service/default | jq "."

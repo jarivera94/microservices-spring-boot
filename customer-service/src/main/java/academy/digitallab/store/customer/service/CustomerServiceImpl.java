@@ -3,6 +3,8 @@ package academy.digitallab.store.customer.service;
 import academy.digitallab.store.customer.repository.CustomerRepository;
 import academy.digitallab.store.customer.repository.entity.Customer;
 import academy.digitallab.store.customer.repository.entity.Region;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,10 +12,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class CustomerServiceImpl  implements CustomerService {
 
-    @Autowired
-    CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
     @Override
     public List<Customer> findCustomerAll() {
