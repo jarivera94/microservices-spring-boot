@@ -9,25 +9,30 @@ import academy.digitallab.store.shopping.repository.InvoiceItemsRepository;
 import academy.digitallab.store.shopping.repository.InvoiceRepository;
 import academy.digitallab.store.shopping.entity.Invoice;
 import academy.digitallab.store.shopping.util.Constant;
-import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class InvoiceServiceImpl implements InvoiceService {
 
-    private final InvoiceRepository invoiceRepository;
-    private final InvoiceItemsRepository invoiceItemsRepository;
-    private final CustomerClient customerClient;
-    private final ProductClient productClient;
+    @Autowired
+    InvoiceRepository invoiceRepository;
+
+    @Autowired
+    InvoiceItemsRepository invoiceItemsRepository;
+
+    @Autowired
+    CustomerClient customerClient;
+
+    @Autowired
+    ProductClient productClient;
+
 
     @Override
     public List<Invoice> findInvoiceAll() {
@@ -42,7 +47,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             return  invoiceDB;
         }
         invoice.setState( Constant.STATE_CREATED );
-        invoice.setCreatedBy( "admin" );
+        invoice.setCreatedBy ( "admin" );
         return invoiceRepository.save(invoice);
     }
 
@@ -89,5 +94,4 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
         return invoice ;
     }
-
 }

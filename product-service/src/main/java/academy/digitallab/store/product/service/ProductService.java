@@ -14,4 +14,10 @@ public interface ProductService {
     public  Product deleteProduct(Long id);
     public List<Product> findByCategory(Category category);
     public Product updateStock(Long id, Double quantity);
+
+    public Category createCategory(Category category);
+    public Category updateCategory(Category category);
+    public Category getCategory(Long id);
+    public Category deleteCategory(Long id);
+    public List<Category> findCategoryAll();
 }

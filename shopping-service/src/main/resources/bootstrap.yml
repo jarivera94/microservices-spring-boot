@@ -15,3 +15,29 @@ feign:
         connectTimeout: 2000
         readTimeout: 2000
         loggerLevel: basic
+customer-service:
+  ribbon:
+    MaxAutoRetries: 5
+    MaxAutoRetriesNextServer: 5
+    OkToRetryOnAllOperations: true
+product-service:
+  ribbon:
+    MaxAutoRetries: 5
+    MaxAutoRetriesNextServer: 5
+    OkToRetryOnAllOperations: true
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+  threadpool:
+    default:
+      coreSize: 30
+      maxQueueSize: 101
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

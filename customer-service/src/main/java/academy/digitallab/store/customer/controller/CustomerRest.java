@@ -5,10 +5,7 @@ import academy.digitallab.store.customer.repository.entity.Customer;
 import academy.digitallab.store.customer.repository.entity.Region;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.asm.Advice.Argument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,15 +23,16 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequestMapping("/customers")
-@RequiredArgsConstructor
 public class CustomerRest {
 
-    private final CustomerService customerService;
+    @Autowired
+    CustomerService customerService;
 
     // -------------------Retrieve All Customers--------------------------------------------
 
     @GetMapping
     public ResponseEntity<List<Customer>> listAllCustomers(@RequestParam(name = "regionId" , required = false) Long regionId ) {
+        log.info("get listAllCustomer INFO" );
         List<Customer> customers =  new ArrayList<>();
         if (null ==  regionId) {
             customers = customerService.findCustomerAll();
@@ -58,7 +56,8 @@ public class CustomerRest {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Customer> getCustomer(@PathVariable("id") long id) {
-        log.info("Fetching Customer with id {}", id);
+        log.info("================Fetching Customer with id {}", id);
+        log.debug("###############Fetching Customer with id {}", id);
         Customer customer = customerService.getCustomer(id);
         if (  null == customer) {
             log.error("Customer with id {} not found.", id);
