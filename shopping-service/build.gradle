@@ -82,7 +82,9 @@ dependencyManagement {
 	}
 }
 configurations {
-	runtime.exclude group: "org.springframework.boot", module: "spring-boot-starter-logging"
+	all {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+	}
 }
 
 test {
