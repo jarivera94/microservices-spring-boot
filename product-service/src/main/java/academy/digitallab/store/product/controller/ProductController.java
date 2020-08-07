@@ -3,11 +3,9 @@ package academy.digitallab.store.product.controller;
 import academy.digitallab.store.product.entity.Category;
 import academy.digitallab.store.product.entity.Product;
 import academy.digitallab.store.product.service.ProductService;
-import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +19,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+@Slf4j
 @RestController
 @RequestMapping (value = "/products")
-@RequiredArgsConstructor
 public class ProductController {
 
-    private final ProductService productService ;
+    @Autowired
+    private ProductService productService ;
 
+    // -------------------Retrieve All Products--------------------------------------------
     @GetMapping
     public ResponseEntity<List<Product>> listProduct(@RequestParam(name = "categoryId", required = false) Long categoryId){
         List<Product> products = new ArrayList<>();
@@ -43,23 +42,25 @@ public class ProductController {
                 return ResponseEntity.notFound().build();
             }
         }
-
-
         return ResponseEntity.ok(products);
     }
 
-
+    // -------------------Retrieve Single Product------------------------------------------
     @GetMapping(value = "/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable("id") Long id) {
+        log.info("Fetching Product with id {}", id);
         Product product =  productService.getProduct(id);
         if (null==product){
+            log.error("Product with id {} not found.", id);
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(product);
     }
 
+    // -------------------Create a Product-------------------------------------------
     @PostMapping
     public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product, BindingResult result){
+        log.info("Creating Product: {}",product);
         if (result.hasErrors()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
         }
@@ -67,32 +68,42 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(productCreate);
     }
 
+    //------------------Update Product--------------------------------
    @PutMapping(value = "/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable("id") Long id, @RequestBody Product product){
+       log.info("Updating Product with id {}", id);
         product.setId(id);
         Product productDB =  productService.updateProduct(product);
         if (productDB == null){
+            log.error("Unable to update. Product with id {} not found.", id);
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(productDB);
     }
 
+    // ------------------- Delete a Product-----------------------------------------
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Product> deleteProduct(@PathVariable("id") Long id){
         Product productDelete = productService.deleteProduct(id);
         if (productDelete == null){
+            log.error("Unable to delete. Product with id {} not found.", id);
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(productDelete);
     }
-    @GetMapping(value = "/{id}/stock")
+
+    // -------------------Update Stock to Product-------------------------------------------
+    @PutMapping(value = "/{id}/stock")
     public ResponseEntity<Product> updateStockProduct(@PathVariable  Long id ,@RequestParam(name = "quantity", required = true) Double quantity){
+        log.info("update stock Product : {} with quantity {} ", id, quantity);
         Product product = productService.updateStock(id, quantity);
         if (product == null){
+            log.error("Unable to update stock Product. Product with id {} not found.", id);
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(product);
     }
+
     private String formatMessage( BindingResult result){
         List<Map<String,String>> errors = result.getFieldErrors().stream()
                 .map(err ->{

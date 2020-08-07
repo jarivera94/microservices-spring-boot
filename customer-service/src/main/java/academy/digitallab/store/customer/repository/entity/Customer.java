@@ -2,6 +2,7 @@ package academy.digitallab.store.customer.repository.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -9,11 +10,13 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(name="tbl_customers")
-public class Customer implements Serializable {
+public class Customer  extends AuditingEntity implements Serializable,BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,4 +51,13 @@ public class Customer implements Serializable {
     private Region region;
 
     private String state;
+
+    @PrePersist
+    public void prePersist() {
+        this.setCreatedDate(new Date());
+    }
+    @PreUpdate
+    public void preUpdate() {
+        this.setUpdatedDate(new Date());
+    }
 }

@@ -2,11 +2,14 @@ package academy.digitallab.store.product.service;
 
 import academy.digitallab.store.product.entity.Category;
 import academy.digitallab.store.product.entity.Product;
+import academy.digitallab.store.product.repository.CategoryRepository;
 import academy.digitallab.store.product.repository.ProductRepository;
+import academy.digitallab.store.product.util.Constant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +19,10 @@ public class ProductServiceImpl  implements ProductService{
 
 
     private final ProductRepository productRepository;
+
+
+    private final CategoryRepository categoryRepository;
+
 
     @Override
     public List<Product> listAllProduct() {
@@ -29,10 +36,16 @@ public class ProductServiceImpl  implements ProductService{
 
     @Override
     public Product createProduct(Product product) {
-        product.setStatus("CREATED");
-        product.setCreateAt(new Date());
+        Product productDB = productRepository.findByNumberProduct( product.getNumberProduct () );
+        if (productDB != null ){
+            return productDB;
+        }
+        product.setStatus (Constant.STATE_CREATED );
+        product.setCreatedBy ( "admin" );
 
-        return productRepository.save(product);
+        return productRepository.save ( product );
+
+
     }
 
     @Override
@@ -45,6 +58,7 @@ public class ProductServiceImpl  implements ProductService{
         productDB.setDescription(product.getDescription());
         productDB.setCategory(product.getCategory());
         productDB.setPrice(product.getPrice());
+        productDB.setUpdatedBy ( "admin" );
         return productRepository.save(productDB);
     }
 
@@ -54,7 +68,7 @@ public class ProductServiceImpl  implements ProductService{
         if (null == productDB){
             return null;
         }
-        productDB.setStatus("DELETED");
+        productDB.setStatus(Constant.STATE_DELETED);
         return productRepository.save(productDB);
     }
 
@@ -63,6 +77,7 @@ public class ProductServiceImpl  implements ProductService{
         return productRepository.findByCategory(category);
     }
 
+    @Transactional
     @Override
     public Product updateStock(Long id, Double quantity) {
         Product productDB = getProduct(id);
@@ -72,5 +87,43 @@ public class ProductServiceImpl  implements ProductService{
         Double stock =  productDB.getStock() + quantity;
         productDB.setStock(stock);
         return productRepository.save(productDB);
+    }
+    //---CATEGORY--------------------------------------------
+    @Override
+    public Category createCategory(Category category) {
+
+        return categoryRepository.save(category);
+    }
+
+    @Override
+    public Category updateCategory(Category category) {
+
+        Category categoryDB = getCategory(category.getId());
+        if (categoryDB == null){
+            return null;
+        }
+        categoryDB.setName(category.getName());
+        return categoryRepository.save(categoryDB);
+    }
+
+    @Override
+    public Category getCategory(Long id) {
+        return categoryRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Category deleteCategory(Long id) {
+        Category category = getCategory ( id );
+        if (category ==null){
+            return null;
+        }
+        categoryRepository.deleteById(id);
+        return category;
+    }
+
+    @Override
+    public List <Category> findCategoryAll() {
+
+        return categoryRepository.findAll();
     }
 }

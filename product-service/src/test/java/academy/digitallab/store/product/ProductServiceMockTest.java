@@ -2,6 +2,7 @@ package academy.digitallab.store.product;
 
 import academy.digitallab.store.product.entity.Category;
 import academy.digitallab.store.product.entity.Product;
+import academy.digitallab.store.product.repository.CategoryRepository;
 import academy.digitallab.store.product.repository.ProductRepository;
 import academy.digitallab.store.product.service.ProductService;
 import academy.digitallab.store.product.service.ProductServiceImpl;
@@ -21,12 +22,15 @@ public class ProductServiceMockTest {
     @Mock
     private ProductRepository productRepository;
 
+    @Mock
+    private CategoryRepository categoryRepository;
+
     private ProductService productService;
 
     @BeforeEach
     public void setup(){
         MockitoAnnotations.initMocks(this);
-        productService =  new ProductServiceImpl( productRepository);
+        productService =  new ProductServiceImpl( productRepository, categoryRepository);
         Product computer =  Product.builder()
                 .id(1L)
                 .name("computer")
@@ -37,7 +41,9 @@ public class ProductServiceMockTest {
 
         Mockito.when(productRepository.findById(1L))
                 .thenReturn(Optional.of(computer));
-        Mockito.when(productRepository.save(computer)).thenReturn(computer);
+
+        Mockito.when(productRepository.save(computer))
+                .thenReturn(computer);
 
     }
 

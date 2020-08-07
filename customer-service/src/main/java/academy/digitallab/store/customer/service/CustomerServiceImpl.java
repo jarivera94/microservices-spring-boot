@@ -3,19 +3,20 @@ package academy.digitallab.store.customer.service;
 import academy.digitallab.store.customer.repository.CustomerRepository;
 import academy.digitallab.store.customer.repository.entity.Customer;
 import academy.digitallab.store.customer.repository.entity.Region;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import academy.digitallab.store.customer.util.Constant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class CustomerServiceImpl  implements CustomerService {
 
-    private final CustomerRepository customerRepository;
+    @Autowired
+    CustomerRepository customerRepository;
 
     @Override
     public List<Customer> findCustomerAll() {
@@ -35,7 +36,8 @@ public class CustomerServiceImpl  implements CustomerService {
             return  customerDB;
         }
 
-        customer.setState("CREATED");
+        customer.setState ( Constant.STATE_CREATED );
+        customer.setCreatedBy ( "admin" );
         customerDB = customerRepository.save ( customer );
         return customerDB;
     }
@@ -50,7 +52,7 @@ public class CustomerServiceImpl  implements CustomerService {
         customerDB.setLastName(customer.getLastName());
         customerDB.setEmail(customer.getEmail());
         customerDB.setPhotoUrl(customer.getPhotoUrl());
-
+        customerDB.setUpdatedBy ( "admin" );
         return  customerRepository.save(customerDB);
     }
 
@@ -60,12 +62,17 @@ public class CustomerServiceImpl  implements CustomerService {
         if (customerDB ==null){
             return  null;
         }
-        customer.setState("DELETED");
+        customerDB.setState ( Constant.STATE_DELETED );
         return customerRepository.save(customer);
     }
 
     @Override
     public Customer getCustomer(Long id) {
+//        try {
+//            TimeUnit.SECONDS.sleep(1);
+//        } catch (InterruptedException ie) {
+//            Thread.currentThread().interrupt();
+//        }
         return  customerRepository.findById(id).orElse(null);
     }
 }

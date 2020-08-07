@@ -14,24 +14,24 @@ import java.util.Date;
 public class AuditingEntity implements Serializable, BaseEntity {
 
 
-  @Column(name = "created_user", nullable = false,
-      updatable = false)
-  private String createdBy;
+    @Column(name = "created_user", nullable = false,
+            updatable = false)
+    private String createdBy;
 
-  @Temporal(TemporalType.TIMESTAMP)
-  @Column(name = "created_date", nullable = false,
-      updatable = false)
-  private Date createdDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_date", nullable = false,
+            updatable = false)
+    private Date createdDate;
 
-  @Column(name = "updated_user")
-  private String updatedBy;
+    @Column(name = "updated_user")
+    private String updatedBy;
 
-  @Temporal(TemporalType.TIMESTAMP)
-  @Column(name = "updated_date")
-  private Date updatedDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_date")
+    private Date updatedDate;
 
-  @Version
-  @Column(name = "row_version")
-  @JsonIgnore
-  private Long rowVersion;
+    @Version
+    @Column(name = "row_version")
+    @JsonIgnore
+    private Long rowVersion;
 }
